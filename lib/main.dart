@@ -4,10 +4,21 @@ import 'modelo/albumbiblio.dart';
 import 'views/album_list.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(create: (_) => AlbumBiblio(),
+  AlbumBiblio.leerArchivo().then((albumes) {
+    runApp(ChangeNotifierProvider(create: (_) {
+      AlbumBiblio albumBiblio = 
+        (albumes == null) ? AlbumBiblio() 
+        : AlbumBiblio.fromJson(albumes);
+      return albumBiblio;
+      },
+      child: const MyApp()
+    ),);
+  });
+
+  /*runApp(ChangeNotifierProvider(create: (_) => AlbumBiblio(),
       child: const MyApp()
     ),
-  );
+  );*/
 }
 
 class MyApp extends StatelessWidget {
