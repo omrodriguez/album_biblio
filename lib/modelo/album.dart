@@ -16,41 +16,46 @@ Map generos = {
 };
 
 class Album {
-  late String _titulo;
-  late String _artista;
-  late int _anio;
-  late Gender _gender;
+  int? id;
+  String titulo;
+  String artista;
+  int anio;
+  Gender gender;
 
-  Album(this._titulo, this._artista, this._anio, this._gender);
+  Album({
+    this.id,
+    required this.titulo, 
+    required this.artista, 
+    required this.anio, 
+    required this.gender});
 
-  Album.vacio(){
-    _titulo = "";
-    _artista = "";
-    _anio = 0;
-    _gender = Gender.undefined;
-  }
+  Album.vacio({
+    this.id = 0,
+    this.titulo = "",
+    this.artista = "",
+    this.anio = 0,
+    this.gender = Gender.undefined,
+  });
 
   Album.fromJson(Map<String, dynamic> json)
-    : _titulo = json['titulo'],
-      _artista = json['artista'],
-      _anio = json['anio'],
-      _gender = Gender.values.byName(json['gender']);
+    : id = json['id'],
+      titulo = json['titulo'],
+      artista = json['artista'],
+      anio = json['anio'],
+      gender = Gender.values.byName(json['gender']);
 
   Map<String, dynamic> toJson() => {
-    'titulo': _titulo,
-    'artista': _artista,
-    'anio': _anio,
-    'gender': _gender.name,
+    'id': id,
+    'titulo': titulo,
+    'artista': artista,
+    'anio': anio,
+    'gender': gender.name,
   };
 
-  String get titulo => _titulo;
-  String get artista => _artista;
-  int get anio => _anio;
-  String get genero => generos[_gender];
-  Gender get gender => _gender; 
+  String get genero => generos[gender];
 
-  set titulo(String titulo) => _titulo;
-  set artista(String artista) => _artista;
-  set anio(int anio) => _anio;
-  set gender(Gender genero) => _gender;
+  @override
+  String toString() {
+    return "Album{id: $id, titulo: $titulo, artista, $artista, anio: $anio, gender:${gender.name}}";
+  }
 }

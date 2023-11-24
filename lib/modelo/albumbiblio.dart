@@ -1,71 +1,32 @@
 import 'package:flutter/material.dart';
 import 'album.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:async';
-import 'package:path_provider/path_provider.dart';
 
 class AlbumBiblio extends ChangeNotifier {
   final List<Album> _listaAlbumes = [];
-  static String nombreArchivo = "albumes.json";
 
   AlbumBiblio();
-
-  AlbumBiblio.fromJson(Map<String, dynamic> json) {
-    List<dynamic> albumes = json["albumes"];
-    for (int i = 0; i < albumes.length; i++) {
-      _listaAlbumes.add(Album.fromJson(albumes[i]));
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>> albumes = [];
-    for (int i = 0; i < _listaAlbumes.length ; i++) {
-      albumes.add(_listaAlbumes[i].toJson());
-    }
-    Map<String, dynamic> mapa = {"albumes": albumes};
-    return mapa;
-  }
-
-  static Future<String> get _pathLocal async {
-    final directorio = await getApplicationDocumentsDirectory();
-    return directorio.path;
-  }
-
-  static Future<File> get _archivoLocal async {
-    final path = await _pathLocal;
-    return File('$path${Platform.pathSeparator}$nombreArchivo');
-  }
-
-  Future<File> guardarAlbumes() async{
-    final archivo = await _archivoLocal;
-    return archivo.writeAsString(jsonEncode(toJson()));
-  }
-
-  static Future<Map<String, dynamic>?> leerArchivo() async {
-    final archivo = await _archivoLocal;
-    if (archivo.existsSync()) {
-      String contenido = await archivo.readAsString();
-      return jsonDecode(contenido);
-    }
-    return null;
-  }
 
   List<Album> get albumes => _listaAlbumes;
 
   Album getAlbumByIndex(int index) =>_listaAlbumes[index];
 
+  void setAlbumes(List<Album> albumes) {
+    _listaAlbumes.clear();
+    for (Album album in albumes) {
+      _listaAlbumes.add(album);
+    }
+    notifyListeners();
+  }
+  
   void addAlbum(Album album) {
     _listaAlbumes.add(album);
     notifyListeners();
-    guardarAlbumes();
   }
 
   bool updateAlbum(int index, Album album) {
     if (index >= 0 && index < _listaAlbumes.length) {
       _listaAlbumes[index] = album;
       notifyListeners();
-      guardarAlbumes();
       return true;
     }
     return false;
@@ -75,7 +36,6 @@ class AlbumBiblio extends ChangeNotifier {
     if (index >= 0 && index < _listaAlbumes.length) {
       _listaAlbumes.removeAt(index);
       notifyListeners();
-      guardarAlbumes();
       return true;
     }
     return false;
