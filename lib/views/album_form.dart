@@ -16,7 +16,7 @@ class _AlbumFormState extends State<AlbumForm> {
   final TextEditingController ctrAnio = TextEditingController();
   final TextEditingController ctrGender = TextEditingController();
   var selectedGender = Gender.undefined;
-  int? id;
+  String? id;
   late final String tituloForm;
 
   @override

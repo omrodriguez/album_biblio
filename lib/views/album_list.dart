@@ -28,7 +28,6 @@ class _AlbumListaState extends State<AlbumLista> {
 
   @override
   void dispose() {
-    manejadorDB.cerrarDB();
     super.dispose();
   }
 
@@ -81,7 +80,9 @@ class _AlbumListaState extends State<AlbumLista> {
           title: Text(album.titulo),
           subtitle: Text("${album.artista}, Año: ${album.anio}, Género: ${album.genero}"),
           trailing: SizedBox(width: 120,
-            child: crearButtonsBar(i)),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: crearButtonsBar(i))),
           textColor: Colors.white,
           tileColor: Colors.lightBlue,
           selectedColor: Colors.blue,
@@ -126,7 +127,7 @@ class _AlbumListaState extends State<AlbumLista> {
     );
 
     if (album != null) {
-      int id = await manejadorDB.insertarAlbum(album);
+      String id = await manejadorDB.insertarAlbum(album);
       album.id = id;
       albumes.addAlbum(album);
     }

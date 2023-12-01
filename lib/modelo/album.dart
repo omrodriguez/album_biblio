@@ -16,7 +16,7 @@ Map generos = {
 };
 
 class Album {
-  int? id;
+  String? id;
   String titulo;
   String artista;
   int anio;
@@ -30,12 +30,19 @@ class Album {
     required this.gender});
 
   Album.vacio({
-    this.id = 0,
+    this.id = "0",
     this.titulo = "",
     this.artista = "",
     this.anio = 0,
     this.gender = Gender.undefined,
   });
+
+  Album.fromMapID(String idn, Map<String, dynamic> json)
+    : id = idn,
+      titulo = json['titulo'],
+      artista = json['artista'],
+      anio = json['anio'],
+      gender = Gender.values.byName(json['gender']);
 
   Album.fromJson(Map<String, dynamic> json)
     : id = json['id'],
@@ -45,7 +52,6 @@ class Album {
       gender = Gender.values.byName(json['gender']);
 
   Map<String, dynamic> toJson() => {
-    'id': id,
     'titulo': titulo,
     'artista': artista,
     'anio': anio,
